@@ -92,7 +92,7 @@ router.delete('/:movie_id', function (req, res, next) {
     })
 });
 
-router.get('/beetween/:start_year/end_year', function (req, res, next) {
+router.get('/between/:start_year/end_year', function (req, res, next) {
     const {start_year, end_year} = req.params
     const promise = Movie.find({
         year: {"$gte": parseInt(start_year), "$lte": parseInt(end_year)} //$gte büyük ve eşit  $lte küçük ve eşit

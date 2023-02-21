@@ -22,7 +22,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/api/movie', movie);
+app.use('/api/movies', movie);
 
 app.use(function (req, res, next) {
     next(createError(404));

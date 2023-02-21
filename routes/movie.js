@@ -31,6 +31,23 @@ router.get('/', function (req, res, next) {
 });
 
 // movie detail
+router.get('/top10', function (req, res, next) {
+    const promise = Movie.find({}).limit(10).sort({imdb_score: -1});
+    promise.then((data) => {
+        if (!data)
+            next({message: 'The movie was not found', code: status.NOT_FOUND})
+        else
+            res.json({
+                data: data,
+                status: status.OK,
+            })
+    }).catch((err) => {
+        res.json(err)
+    })
+});
+
+
+// movie detail
 router.get('/:movie_id', function (req, res, next) {
     const promise = Movie.findById(req.params.movie_id);
     promise.then((data) => {
@@ -63,13 +80,31 @@ router.put('/:movie_id', function (req, res, next) {
 
 
 router.delete('/:movie_id', function (req, res, next) {
-    const promise = Movie.findByIdAndRemove(req.params.movie_id); //new dönüşten sonran en güncel halini veriyor
+    const promise = Movie.findByIdAndRemove(req.params.movie_id);
 
     promise.then((movie) => {
         if (!movie)
             next({message: 'The movie was not found', code: status.NOT_FOUND})
         else
             res.json(status.OK)
+    }).catch((err) => {
+        res.json(err)
+    })
+});
+
+router.get('/beetween/:start_year/end_year', function (req, res, next) {
+    const {start_year, end_year} = req.params
+    const promise = Movie.find({
+        year: {"$gte": parseInt(start_year), "$lte": parseInt(end_year)} //$gte büyük ve eşit  $lte küçük ve eşit
+    })
+    promise.then((data) => {
+        if (!data)
+            next({message: 'The movie was not found', code: status.NOT_FOUND})
+        else
+            res.json({
+                data: data,
+                status: status.OK,
+            })
     }).catch((err) => {
         res.json(err)
     })

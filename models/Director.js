@@ -20,4 +20,4 @@ const DirectorSchema = new Schema({
     }
 })
 
-module.exports = mongoose.model('movie', MovieSchema)
+module.exports = mongoose.model('director', DirectorSchema)

@@ -5,6 +5,7 @@ const status = require('http-status-codes')
 
 const Director = require('../models/Director')
 
+
 router.post('/', function (req, res, next) {
     const director = new Director(req.body)
     const promise = director.save();
@@ -121,5 +122,32 @@ router.get('/:direction_id', function (req, res, next) {
     })
 });
 
+router.delete('/:direction_id', function (req, res, next) {
+    const promise = Director.findByIdAndRemove(req.params.direction_id);
+
+    promise.then((movie) => {
+        if (!movie)
+            next({message: 'The direction was not found', code: status.NOT_FOUND})
+        else
+            res.json(status.OK)
+    }).catch((err) => {
+        res.json(err)
+    })
+});
+
+router.put('/:direction_id', function (req, res, next) {
+    const promise = Director.findByIdAndUpdate(req.params.direction_id, req.body, {new: true}); //new dönüşten sonran en güncel halini veriyor
+    promise.then((data) => {
+        if (!data)
+            next({message: 'The direction was not found', code: status.NOT_FOUND})
+        else
+            res.json({
+                data: data,
+                status: status.OK,
+            })
+    }).catch((err) => {
+        res.json(err)
+    })
+});
 
 module.exports = router;

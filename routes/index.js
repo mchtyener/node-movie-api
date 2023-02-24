@@ -44,8 +44,7 @@ router.post('/login', function (req, res, next) {
                 status: status.NOT_FOUND, message: 'Login failed, User not found'
             })
         } else {
-            const bytes = CryptoJS.AES.decrypt(data.password, process.env.CRYPTO_KEY)
-            if (password !== bytes.toString(CryptoJS.enc.Utf8)) {
+            if (password !== CryptoJS.AES.decrypt(data.password, process.env.CRYPTO_KEY).toString(CryptoJS.enc.Utf8)) {
                 res.json({
                     status: status.NOT_FOUND, message: 'Login failed, wrong password'
                 })
